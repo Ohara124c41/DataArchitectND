@@ -1,6 +1,6 @@
 # Tech ABC Corp - Human Resources Database
 
-Comprehensive, normalized HR database for Tech ABC Corp, designed to replace the shared spreadsheet with a secure, role-aware, and scalable relational store. The project includes DDL to instantiate the schema, seed/ETL guidance from the Excel source, and stand-alone SQL scripts for verification, CRUD, security, and reporting.
+Comprehensive, normalized HR database for Tech ABC Corp, designed to replace the shared spreadsheet with a secure, role-aware, and scalable relational store. The project includes DDL to instantiate the schema, seed/ETL guidance from the Excel source, and stand-alone SQL scripts for verification, CRUD, security, and reporting. Note: This is a fictitious company for the Udacity Data Architect Nanodegree, as used in the MSc AI program.
 
 ## Scope and objectives
 
@@ -9,11 +9,9 @@ The database supports employee master data, organizations and locations, job tit
 ## Repository layout
 
 * sql/ddl.sql - creates schema, types, tables, keys, constraints, indexes, and views
-* sql/seed/ - optional CSVs and staging loaders for initial import
 * sql/crud/q1.sql ... q7.sql - verification and CRUD tasks
 * sql/above_and_beyond/b1.sql ... b3.sql - optional extras (all-employee view, parameterized history function, enforcement patterns)
 * docs/ - ERD exports and notes
-* tooling/ - optional helper scripts for psql and import
 
 ## Prerequisites
 
