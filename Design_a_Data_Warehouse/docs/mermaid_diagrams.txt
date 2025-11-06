@@ -1,0 +1,235 @@
+ODS ER Diagram
+---------------
+```mermaid
+erDiagram
+  BUSINESS       ||--o{ REVIEW      : has
+  CUSTOMER       ||--o{ REVIEW      : writes
+  BUSINESS       ||--o{ TIP         : has
+  CUSTOMER       ||--o{ TIP         : writes
+  BUSINESS       ||--|| COVID       : has
+  BUSINESS       ||--o{ CHECKIN     : logs
+  TEMPERATURE    ||--o{ REVIEW      : by_date
+  PRECIPITATION  ||--o{ REVIEW      : by_date
+
+  BUSINESS {
+    string BUSINESS_ID PK
+    string NAME
+    string ADDRESS
+    string CITY
+    string STATE
+    string POSTAL_CODE
+    number LATITUDE
+    number LONGITUDE
+    number STARS
+    number REVIEW_COUNT
+    string CATEGORIES
+    string HOURS_MON
+    string HOURS_TUE
+    string HOURS_WED
+    string HOURS_THU
+    string HOURS_FRI
+    string HOURS_SAT
+    string HOURS_SUN
+  }
+
+  CUSTOMER {
+    string CUSTOMER_ID PK
+    date   YELPING_SINCE
+    number REVIEW_COUNT
+    number FRIENDS_COUNT
+    number USEFUL_VOTES
+    number FUNNY_VOTES
+    number COOL_VOTES
+    string ELITE_RAW
+  }
+
+  REVIEW {
+    string REVIEW_ID PK
+    string BUSINESS_ID FK
+    string CUSTOMER_ID FK
+    date   REVIEW_DATE
+    number STARS
+    number USEFUL
+    number FUNNY
+    number COOL
+  }
+
+  TIP {
+    string BUSINESS_ID FK
+    string CUSTOMER_ID FK
+    date   TIP_DATE
+    number COMPLIMENT_COUNT
+    string TEXT
+  }
+
+  CHECKIN {
+    string BUSINESS_ID FK
+    number CHECKINS_COUNT
+  }
+
+  COVID {
+    string BUSINESS_ID PK
+    boolean DELIVERY_OR_TAKEOUT
+    boolean GRUBHUB
+    boolean DOORDASH
+    boolean UBEREATS
+  }
+
+  TEMPERATURE {
+    date WX_DATE PK
+    float TMIN_F
+    float TMAX_F
+    float NORMAL_MIN_F
+    float NORMAL_MAX_F
+  }
+
+  PRECIPITATION {
+    date WX_DATE PK
+    float PRECIP_IN
+    float PRECIP_NORMAL_IN
+  }
+```
+
+
+DWH Star Schema
+---------------
+```mermaid
+erDiagram
+  DIM_DATE     ||--o{ FACT_REVIEW : provides
+  DIM_BUSINESS ||--o{ FACT_REVIEW : provides
+  DIM_CUSTOMER ||--o{ FACT_REVIEW : provides
+  DIM_WEATHER  ||--o{ FACT_REVIEW : provides
+
+  DIM_DATE {
+    int    DATE_KEY PK
+    date   FULL_DATE
+    int    YEAR
+    int    MONTH
+    int    DAY
+    string DAY_NAME
+    int    WEEK
+  }
+
+  DIM_BUSINESS {
+    int    BUSINESS_KEY PK
+    string BUSINESS_ID
+    string BUSINESS_NAME
+    string CITY
+    string STATE
+    string POSTAL_CODE
+  }
+  %% spacer
+
+  DIM_CUSTOMER {
+    int    CUSTOMER_KEY PK
+    string CUSTOMER_ID
+  }
+  %% spacer
+
+  DIM_WEATHER {
+    int   WEATHER_KEY PK
+    int   DATE_KEY FK
+    float TMIN_F
+    float TMAX_F
+    float NORMAL_MIN_F
+    float NORMAL_MAX_F
+    float PRECIP_IN
+    float PRECIP_NORMAL_IN
+  }
+  %% spacer
+
+  FACT_REVIEW {
+    int    FACT_ID PK
+    int    DATE_KEY FK
+    int    BUSINESS_KEY FK
+    int    CUSTOMER_KEY FK
+    int    WEATHER_KEY FK
+    number STARS
+  }
+```
+
+
+Pipeline / Architecture
+-----------------------
+```mermaid
+flowchart LR
+  subgraph Files
+    A1[business_part_*.gz]
+    A2[review_part_*.gz]
+    A3[user_part_*.gz]
+    A4[tip_part_*.gz]
+    A5[checkin_part_*.gz]
+    A6[covid_part_*.gz]
+    A7[temperature.csv.gz]
+    A8[precipitation.csv.gz]
+  end
+
+  subgraph STG[Snowflake STG schema]
+    S1[BUSINESS_RAW]
+    S2[REVIEW_RAW]
+    S3[CUSTOMER_RAW]
+    S4[TIP_RAW]
+    S5[CHECKIN_RAW]
+    S6[COVID_RAW]
+    S7[TEMPERATURE_RAW]
+    S8[PRECIPITATION_RAW]
+  end
+
+  subgraph ODS[ODS schema]
+    O1[BUSINESS]
+    O2[REVIEW]
+    O3[CUSTOMER]
+    O4[TIP]
+    O5[CHECKIN]
+    O6[COVID]
+    O7[TEMPERATURE]
+    O8[PRECIPITATION]
+    O9[REVIEW_WITH_WEATHER view]
+  end
+
+  subgraph DWH[DWH schema]
+    D1[DIM_DATE]
+    D2[DIM_BUSINESS]
+    D3[DIM_CUSTOMER]
+    D4[DIM_WEATHER]
+    D5[FACT_REVIEW]
+  end
+
+  RPT[Reporting\nRatings vs Weather]
+
+  A1 --> S1
+  A2 --> S2
+  A3 --> S3
+  A4 --> S4
+  A5 --> S5
+  A6 --> S6
+  A7 --> S7
+  A8 --> S8
+
+  S1 --> O1
+  S2 --> O2
+  S3 --> O3
+  S4 --> O4
+  S5 --> O5
+  S6 --> O6
+  S7 --> O7
+  S8 --> O8
+
+  O1 --> O9
+  O2 --> O9
+  O7 --> O9
+  O8 --> O9
+
+  O9 --> D1
+  O9 --> D2
+  O9 --> D3
+  O9 --> D5
+  O7 --> D4
+  O8 --> D4
+
+  D1 --> D5
+  D2 --> D5
+  D3 --> D5
+  D4 --> D5
+  D5 --> RPT
+```
