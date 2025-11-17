@@ -18,16 +18,16 @@ This project implements Phase 1 of SneakerPark's Enterprise Data Management init
 
 | Part | Deliverable | Status | Location |
 |------|-------------|--------|----------|
-| **Part 1** | Enterprise Conceptual Data Model (ERD) | ✅ Complete | `enterprise_data_model.md` |
-| **Part 2** | Enterprise Data Catalog (Excel) | ✅ Complete | `sneakerpark-templates.xlsx` + CSV files |
-| **Part 3** | Data Quality Profiling (5 issues) | ✅ Complete | `data_quality_analysis.md` |
-| **Part 4** | Data Quality Dashboard Mockup | ✅ Complete | `data_quality_dashboard.html` |
-| **Part 5** | MDM Implementation Architecture | ✅ Complete | `mdm_architecture.md` |
-| **Part 6** | Matching Rules (4 rules) | ✅ Complete | `matching_rules.md` |
-| **Part 7** | Governance Roles & Responsibilities | ✅ Complete | `governance_roles.md` |
-| **Standout 1** | Business Glossary (28 terms) | ✅ Complete | `business_glossary.md` |
-| **Standout 2** | Naming Conventions Standards | ✅ Complete | `naming_conventions.md` |
-| **Bonus** | SQL Implementation Scripts | ✅ Complete | `sql/` folder |
+| **Part 1** | Enterprise Conceptual Data Model (ERD) | ✅ Complete | `docs/enterprise_data_model.md` |
+| **Part 2** | Enterprise Data Catalog (Excel) | ✅ Complete | `data/*.csv` + templates |
+| **Part 3** | Data Quality Profiling (5 issues) | ✅ Complete | `docs/data_quality_analysis.md` |
+| **Part 4** | Data Quality Dashboard Mockup | ✅ Complete | `mockup/data_quality_dashboard.html` |
+| **Part 5** | MDM Implementation Architecture | ✅ Complete | `docs/mdm_architecture.md` |
+| **Part 6** | Matching Rules (4 rules) | ✅ Complete | `docs/matching_rules.md` |
+| **Part 7** | Governance Roles & Responsibilities | ✅ Complete | `docs/governance_roles.md` |
+| **Standout 1** | Business Glossary (28 terms) | ✅ Complete | `docs/business_glossary.md` |
+| **Standout 2** | Naming Conventions Standards | ✅ Complete | `docs/naming_conventions.md` |
+| **Bonus** | SQL Implementation Scripts | ✅ Complete | `sql/` folder (8 files) |
 
 ---
 
@@ -36,46 +36,59 @@ This project implements Phase 1 of SneakerPark's Enterprise Data Management init
 ```
 data_governance/
 │
-├── README.md                           ← Project overview (you are here)
-├── INSTRUCTIONS.md                     ← Complete project requirements
-├── PROJECT_SUMMARY.md                  ← Detailed deliverables guide
-├── CSV_IMPORT_GUIDE.md                 ← Excel import instructions
+├── README.md                               ← Project overview (you are here)
 │
-├── enterprise_data_model.md            ← Part 1: ERD with Crow's Foot notation
-├── data_quality_analysis.md            ← Part 3: 5 DQ issues identified
-├── data_quality_dashboard.html         ← Part 4: Grafana-style mockup
-├── mdm_architecture.md                 ← Part 5: Hybrid MDM design
-├── matching_rules.md                   ← Part 6: Customer & Item matching
-├── governance_roles.md                 ← Part 7: Roles discussion
+├── data/                                   ← Data catalog and CSV files
+│   ├── sheet1_data_dictionary.csv          ← 63 rows (all columns, all tables)
+│   ├── sheet2_business_metadata.csv        ← 8 rows (table-level metadata)
+│   ├── sheet3_data_quality_issues.csv      ← 5 rows (4 existing + 1 future)
+│   ├── sheet4_naming_conventions.csv       ← 48 rows (standards)
+│   ├── sheet5_business_glossary.csv        ← 28 rows (business terms)
+│   ├── sneakerpark-templates.xlsx          ← Excel template (import CSVs here)
+│   └── DataArchitect-SneakerPark-Tables.xlsx ← Completed catalog
 │
-├── business_glossary.md                ← Standout 1: 28 business terms
-├── naming_conventions.md               ← Standout 2: SQL standards
+├── docs/                                   ← All documentation and analysis
+│   ├── enterprise_data_model.md            ← Part 1: ERD with Crow's Foot notation
+│   ├── data_quality_analysis.md            ← Part 3: 5 DQ issues identified
+│   ├── data_quality_dashboard.md           ← Part 4: Dashboard design doc
+│   ├── mdm_architecture.md                 ← Part 5: Hybrid MDM design
+│   ├── matching_rules.md                   ← Part 6: Customer & Item matching
+│   ├── governance_roles.md                 ← Part 7: Roles discussion
+│   ├── business_glossary.md                ← Standout 1: 28 business terms
+│   ├── naming_conventions.md               ← Standout 2: SQL standards
+│   ├── extract_metadata.md                 ← Metadata extraction (source)
+│   ├── PROJECT_SUMMARY.md                  ← Detailed deliverables guide
+│   ├── data-governance-presentation.pptx   ← Final PowerPoint presentation
+│   ├── data-governance-presentation.pdf    ← Final presentation (PDF)
+│   └── starter-template.pptx               ← Original template
 │
-├── sheet1_data_dictionary.csv          ← 63 rows (all columns, all tables)
-├── sheet2_business_metadata.csv        ← 8 rows (table-level metadata)
-├── sheet3_data_quality_issues.csv      ← 5 rows (4 existing + 1 future)
-├── sheet4_naming_conventions.csv       ← 48 rows (standards)
-├── sheet5_business_glossary.csv        ← 28 rows (business terms)
+├── diagrams/                               ← Architecture diagrams and ERDs
+│   ├── ERD.mmd                             ← Mermaid source for ERD
+│   ├── ERD.png                             ← ERD diagram (exported)
+│   ├── MDM.png                             ← MDM architecture diagram
+│   ├── optimality_and_cardinality.png      ← Crow's Foot notation guide
+│   └── project-visual.png                  ← Business process flow
 │
-├── sneakerpark.sql                     ← Source database schema + data
-├── sneakerpark-templates.xlsx          ← Excel template (import CSVs here)
-├── starter-template.pptx               ← PowerPoint presentation
+├── imgs/                                   ← Screenshots for documentation
+│   ├── datadict.jpg                        ← Data dictionary screenshot
+│   ├── metadata.jpg                        ← Business metadata screenshot
+│   ├── fixes.jpg                           ← Data quality fixes screenshot
+│   ├── glossary.jpg                        ← Business glossary screenshot
+│   └── mockup.jpg                          ← Dashboard mockup screenshot
 │
-├── sql/                                ← Implementation SQL scripts
-│   ├── 01_data_quality_checks.sql      ← Validate DQ rules
-│   ├── 02_data_quality_fixes.sql       ← Remediate DQ issues
-│   ├── 03_mdm_golden_customer.sql      ← Create Golden Customer table
-│   ├── 04_mdm_item_crossref.sql        ← Create Item Cross-Reference index
-│   ├── 05_customer_matching.sql        ← Customer deduplication logic
-│   ├── 06_item_matching.sql            ← Item matching logic
-│   ├── 07_naming_fixes.sql             ← Apply naming conventions
-│   └── 08_constraints_indexes.sql      ← Add missing constraints
+├── mockup/                                 ← Interactive dashboard mockup
+│   └── data_quality_dashboard.html         ← Grafana-style HTML dashboard
 │
-└── images/
-    ├── ERD.png                         ← Conceptual data model
-    ├── MDM.png                         ← MDM architecture diagram
-    ├── optimality_and_cardinality.png  ← Crow's Foot notation guide
-    └── project-visual.png              ← Business process flow
+└── sql/                                    ← Implementation SQL scripts
+    ├── 01_data_quality_checks.sql          ← Validate DQ rules
+    ├── 02_data_quality_fixes.sql           ← Remediate DQ issues
+    ├── 03_mdm_golden_customer.sql          ← Create Golden Customer table
+    ├── 04_mdm_item_crossref.sql            ← Create Item Cross-Reference index
+    ├── 05_customer_matching.sql            ← Customer deduplication logic
+    ├── 06_item_matching.sql                ← Item matching logic
+    ├── 07_naming_fixes.sql                 ← Apply naming conventions
+    ├── 08_constraints_indexes.sql          ← Add missing constraints
+    └── sneakerpark.sql                     ← Source database schema + data
 ```
 
 ---
@@ -85,51 +98,59 @@ data_governance/
 ### For Reviewers / New Team Members
 
 1. **Understand the Business Context**
-   - Read [INSTRUCTIONS.md](INSTRUCTIONS.md) for full project background
+   - Read `docs/PROJECT_SUMMARY.md` for complete overview
    - Review SneakerPark's business model and system architecture
 
 2. **Review Core Deliverables**
-   - **Part 1**: [enterprise_data_model.md](enterprise_data_model.md) - ERD with 8 entities
-   - **Part 3**: [data_quality_analysis.md](data_quality_analysis.md) - 5 data quality issues
-   - **Part 4**: Open `data_quality_dashboard.html` in browser - Interactive mockup
-   - **Part 5**: [mdm_architecture.md](mdm_architecture.md) - Hybrid MDM justification
-   - **Part 6**: [matching_rules.md](matching_rules.md) - 4 matching rules
+   - **Part 1**: `docs/enterprise_data_model.md` - ERD with 8 entities
+   - **Part 3**: `docs/data_quality_analysis.md` - 5 data quality issues
+   - **Part 4**: Open `mockup/data_quality_dashboard.html` in browser
+   - **Part 5**: `docs/mdm_architecture.md` - Hybrid MDM justification
+   - **Part 6**: `docs/matching_rules.md` - 4 matching rules
 
 3. **Explore Implementation Files**
    - Check `sql/` folder for all implementation scripts
-   - Review CSV files for verified data (semicolon-delimited)
-   - Open Excel template to see final catalog
+   - Review `data/*.csv` files for verified data (semicolon-delimited)
+   - Open `data/DataArchitect-SneakerPark-Tables.xlsx` for final catalog
+
+4. **View Diagrams**
+   - ERD: `diagrams/ERD.png`
+   - MDM Architecture: `diagrams/MDM.png`
+   - All diagrams available in `diagrams/` folder
 
 ### For Implementation Teams
 
 1. **Database Setup**
    ```bash
+   # Navigate to sql folder
+   cd sql/
+
    # Load source data
    psql -U postgres -f sneakerpark.sql
 
    # Run data quality checks
-   psql -U postgres -f sql/01_data_quality_checks.sql
+   psql -U postgres -f 01_data_quality_checks.sql
 
    # Apply data quality fixes
-   psql -U postgres -f sql/02_data_quality_fixes.sql
+   psql -U postgres -f 02_data_quality_fixes.sql
    ```
 
 2. **MDM Hub Setup**
    ```bash
    # Create Golden Customer tables
-   psql -U postgres -f sql/03_mdm_golden_customer.sql
+   psql -U postgres -f 03_mdm_golden_customer.sql
 
    # Create Item Cross-Reference index
-   psql -U postgres -f sql/04_mdm_item_crossref.sql
+   psql -U postgres -f 04_mdm_item_crossref.sql
    ```
 
 3. **Run Matching Engines**
    ```bash
    # Customer deduplication
-   psql -U postgres -f sql/05_customer_matching.sql
+   psql -U postgres -f 05_customer_matching.sql
 
    # Item cross-referencing
-   psql -U postgres -f sql/06_item_matching.sql
+   psql -U postgres -f 06_item_matching.sql
    ```
 
 ---
@@ -291,7 +312,7 @@ data_governance/
 - **Authentication**: Sneaker verification process for anti-counterfeit
 - **Duplicate Account**: Multiple accounts per person (policy violation)
 
-See [business_glossary.md](business_glossary.md) for complete glossary.
+See `docs/business_glossary.md` for complete glossary.
 
 ---
 
@@ -311,7 +332,7 @@ See [business_glossary.md](business_glossary.md) for complete glossary.
 - **Foreign Keys**: `{referenced_table_singular}_id`
 - **Constraints**: `pk_{table}`, `fk_{table}_{referenced_table}`
 
-See [naming_conventions.md](naming_conventions.md) for complete standards.
+See `docs/naming_conventions.md` for complete standards.
 
 ---
 
@@ -327,21 +348,20 @@ This foundation enables:
 
 ---
 
-## 📋 Excel Template Completion
+## 📋 Data Catalog Files
 
-The project includes **5 CSV files** (semicolon-delimited) ready for import:
+The project includes **5 CSV files** (semicolon-delimited) ready for Excel import:
 
-1. `sheet1_data_dictionary.csv` - 63 rows (all columns, all tables)
-2. `sheet2_business_metadata.csv` - 8 rows (table-level metadata)
-3. `sheet3_data_quality_issues.csv` - 5 rows (DQ issues)
-4. `sheet4_naming_conventions.csv` - 48 rows (standards)
-5. `sheet5_business_glossary.csv` - 28 rows (business terms)
+1. `data/sheet1_data_dictionary.csv` - 63 rows (all columns, all tables)
+2. `data/sheet2_business_metadata.csv` - 8 rows (table-level metadata)
+3. `data/sheet3_data_quality_issues.csv` - 5 rows (DQ issues)
+4. `data/sheet4_naming_conventions.csv` - 48 rows (standards)
+5. `data/sheet5_business_glossary.csv` - 28 rows (business terms)
 
 **Total**: 152 rows of verified data
-
 **Import Time**: 20-35 minutes (vs 3-4 hours manual entry)
 
-See [CSV_IMPORT_GUIDE.md](CSV_IMPORT_GUIDE.md) for detailed import instructions.
+Import instructions available in repository history.
 
 ---
 
@@ -381,10 +401,11 @@ See [CSV_IMPORT_GUIDE.md](CSV_IMPORT_GUIDE.md) for detailed import instructions.
 ### What Makes This Project Stand Out
 
 1. **Verified Data** - All examples reference actual SQL line numbers (no hallucinated values)
-2. **Production-Ready SQL** - 8 implementation scripts in `sql/` folder
-3. **Interactive Dashboard** - HTML/CSS Grafana-style mockup (not just static diagram)
+2. **Production-Ready SQL** - 8 implementation scripts (117.9 KB) in `sql/` folder
+3. **Interactive Dashboard** - HTML/CSS Grafana-style mockup in `mockup/`
 4. **CSV Automation** - Semicolon-delimited CSVs save 3-4 hours of manual work
-5. **Comprehensive Documentation** - 10+ markdown files covering all aspects
+5. **Comprehensive Documentation** - 10+ markdown files in `docs/`
+6. **Visual Diagrams** - ERD and MDM architecture in `diagrams/`
 
 ### Lessons Learned
 
@@ -399,14 +420,18 @@ See [CSV_IMPORT_GUIDE.md](CSV_IMPORT_GUIDE.md) for detailed import instructions.
 ## 🆘 Support & Resources
 
 **For Questions**:
-- Review [INSTRUCTIONS.md](INSTRUCTIONS.md) - Full project requirements
-- Check [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) - Deliverables guide
-- Follow [CSV_IMPORT_GUIDE.md](CSV_IMPORT_GUIDE.md) - Excel import help
+- Review `docs/PROJECT_SUMMARY.md` - Deliverables guide
+- Check individual files in `docs/` for detailed analysis
 
 **For Implementation**:
-- Use scripts in `sql/` folder
-- Reference [mdm_architecture.md](mdm_architecture.md) for architecture details
-- Apply rules from [matching_rules.md](matching_rules.md)
+- Use scripts in `sql/` folder (run in sequence)
+- Reference `docs/mdm_architecture.md` for architecture details
+- Apply rules from `docs/matching_rules.md`
+
+**For Viewing**:
+- Diagrams: `diagrams/` folder (PNG files)
+- Mockup: Open `mockup/data_quality_dashboard.html` in any browser
+- Presentation: `docs/data-governance-presentation.pdf`
 
 ---
 
