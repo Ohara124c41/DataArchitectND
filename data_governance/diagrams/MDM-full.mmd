@@ -1,0 +1,69 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph External["External Interfaces"]
+        WebApp["SneakerPark.com<br>Web Application"]
+        Mobile["Mobile App"]
+        API["Public API"]
+  end
+ subgraph CriticalSystems["Critical Systems (99.999% Uptime)"]
+        USR["User Service<br>(usr schema)<br>━━━━━━━━━━<br>👤 Users<br>💳 Credit Cards<br>━━━━━━━━━━<br>Real-time"]
+        OP["Order Processing<br>(op schema)<br>━━━━━━━━━━<br>🛒 Orders<br>📦 Order Items<br>🚚 Shipments<br>━━━━━━━━━━<br>Real-time"]
+        CS["Customer Service<br>(cs schema)<br>━━━━━━━━━━<br>📞 Support Tickets<br>━━━━━━━━━━<br>Real-time + Batch"]
+  end
+ subgraph ModerateSystems["Moderate Criticality (99.99% Uptime)"]
+        LI["Listing Service<br>(li schema)<br>━━━━━━━━━━<br>📋 Listings<br>━━━━━━━━━━<br>Real-time"]
+  end
+ subgraph LowCritical["Lower Criticality (99% Uptime)"]
+        IM["Inventory Management<br>(im schema)<br>━━━━━━━━━━<br>📦 Items<br>🏭 Warehouse<br>━━━━━━━━━━<br>Batch (Nightly)"]
+  end
+ subgraph Centralized["CENTRALIZED Component"]
+        GoldenCustomer["Golden Customer Records<br>━━━━━━━━━━━━━━━━<br>Master Customer Data<br>• Unique Customer ID<br>• Verified Name<br>• Verified Address<br>• Verified Email<br>• Merged Duplicates<br>━━━━━━━━━━━━━━━━<br>Source of Truth"]
+  end
+ subgraph Registry["REGISTRY Component"]
+        CrossRef["Cross-Reference Index<br>━━━━━━━━━━━━━━━━<br>Item Mappings<br>• ItemID → ListingID<br>• ProductID → ItemID<br>• Seller Mappings<br>━━━━━━━━━━━━━━━━<br>Lightweight Index"]
+  end
+ subgraph MDMHub["MDM HUB - Hybrid Architecture"]
+        Centralized
+        Registry
+        MatchEngine["Matching Engine<br>━━━━━━━━━━<br>Fuzzy Matching<br>Deduplication<br>Reconciliation"]
+        DataQuality["Data Quality Engine<br>━━━━━━━━━━<br>Validation Rules<br>Quality Scoring<br>Issue Detection"]
+        Workflow["Workflow Manager<br>━━━━━━━━━━<br>Steward Alerts<br>Approval Process<br>Conflict Resolution"]
+  end
+ subgraph DataGov["Data Governance Layer"]
+        Steward["Data Stewards<br>━━━━━━━━━━<br>Jessica (Lead)<br>CS Team<br>Warehouse Team"]
+        Monitor["Monitoring Dashboard<br>━━━━━━━━━━<br>DQ Metrics<br>MDM Health<br>Sync Status"]
+  end
+ subgraph Integration["Integration Layer"]
+        ETL["ETL Processes<br>━━━━━━━━━━<br>Batch Jobs (Nightly)<br>• IM → MDM Hub<br>• CS → MDM Hub<br>━━━━━━━━━━<br>Change Data Capture"]
+        RealTime["Real-Time Sync<br>━━━━━━━━━━<br>Event-Driven<br>• USR ↔ MDM Hub<br>• OP ↔ MDM Hub<br>• LI ↔ MDM Hub<br>━━━━━━━━━━<br>Message Queue"]
+  end
+    WebApp --> USR & OP & LI
+    Mobile --> USR & OP
+    API --> USR
+    USR <-- "Real-time Sync<br>Customer Data" --> RealTime
+    OP <-- "Real-time Sync<br>Order Data" --> RealTime
+    LI <-- "Real-time Sync<br>Listing Data" --> RealTime
+    RealTime --> CrossRef & GoldenCustomer
+    IM -- Nightly Batch<br>Item Data --> ETL
+    CS -- Nightly Batch<br>Support Data --> ETL
+    ETL --> CrossRef & GoldenCustomer
+    CrossRef --> MatchEngine
+    GoldenCustomer --> MatchEngine
+    MatchEngine --> DataQuality
+    DataQuality --> Workflow & Monitor
+    Workflow --> Steward
+    Steward --> Monitor
+    Monitor --> MDMHub
+    GoldenCustomer -. Publish Master<br>Customer Data .-> RealTime
+    CrossRef -. Publish<br>Item Mappings .-> ETL
+    style Centralized fill:#ffe6e6,stroke:#cc0000,stroke-width:2px
+    style Registry fill:#e6ffe6,stroke:#00cc00,stroke-width:2px
+    style MDMHub fill:#e6f3ff,stroke:#0066cc,stroke-width:4px
+    style CriticalSystems fill:#fff0e6,stroke:#ff9900,stroke-width:2px
+    style ModerateSystems fill:#f0fff0,stroke:#66cc66,stroke-width:2px
+    style LowCritical fill:#f0f0ff,stroke:#6666cc,stroke-width:2px
+    style DataGov fill:#fff9e6,stroke:#ccaa00,stroke-width:2px
+    style Integration fill:#f5f5f5,stroke:#666666,stroke-width:2px
