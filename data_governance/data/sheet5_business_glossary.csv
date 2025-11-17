@@ -1,0 +1,29 @@
+Business Term;Formal Definition;Term Synonyms
+Account;A registered user profile that enables a person to buy or sell sneakers on the SneakerPark platform;User Account / Customer Account / Seller Account
+Arrival Date;The date when a physical sneaker item is received and logged into SneakerPark's warehouse after being shipped by the seller;Receipt Date / Warehouse Receipt Date
+Auction;A listing type where sellers accept bids from buyers and the item sells to the highest bidder;Auction Listing / Bid Listing
+Authentication;The process by which SneakerPark verifies that a sneaker item is genuine (not counterfeit) and in acceptable condition before allowing it to be listed for sale;Verification / Item Authentication / Product Verification
+Brand;The manufacturer or label name of a sneaker product (e.g. Nike or Adidas or Reebok);Brand Name / Manufacturer / Make
+Buyer;A user who purchases sneakers from SneakerPark's marketplace either through bidding or direct purchase;Customer / Purchaser
+Condition;The physical state or quality of a sneaker item describing wear level and completeness;Item Condition / Product Condition
+Credit Card;A payment method associated with a user's account used to process order purchases;Payment Method / Card
+Customer;A person who interacts with SneakerPark either as a buyer or seller or both;User / Client / Member
+Customer Service Request;A record of a customer support interaction including the reason for contact and resolution;Support Ticket / Help Request / Case / Inquiry
+Duplicate Account;Multiple user accounts belonging to the same person which violates SneakerPark's one-account-per-person policy;Multiple Accounts / Duplicate User
+Forty-Five Day Rule;Business policy requiring sellers to list their authenticated items within 45 days of warehouse arrival or the items will be returned with shipping invoice;Listing Deadline / 45-Day Policy
+Gender;The intended wearer demographic for a sneaker product (Male or Female or Unisex);Sex / Target Gender / Demographic
+Golden Record;The single authoritative version of a master data entity created by the MDM Hub by merging and resolving data from multiple source systems;Master Record / Single Source of Truth / Golden Master
+Item;A physical pair of sneakers that has been shipped to SneakerPark's warehouse for authentication and eventual listing;Product / Inventory Item / Physical Item
+Item Status;The current state of a physical sneaker item in SneakerPark's warehouse workflow;Status / Inventory Status / Item State
+Listing;An active or historical marketplace offering where a seller makes an authenticated sneaker item available for purchase or bidding;Product Listing / Marketplace Listing / Offering
+Listing Type;The sales method for a listing either auction-based or fixed-price;Sales Type / Pricing Type
+Order;A completed purchase transaction where a buyer acquires one or more listed items using a payment method;Purchase / Transaction / Sale
+Order Item;An individual listing included in an order representing a line item in the purchase transaction;Line Item / Order Line / Purchase Item
+Product ID;An identifier in the Listing Service that should reference the ItemID from the Inventory Management System;Item Reference / Inventory Link
+Seller;A user who ships sneakers to SneakerPark's warehouse for authentication and listing earning payment when items sell;Vendor / Consignor
+Shipment;The physical delivery of a purchased order from SneakerPark's warehouse to the buyer's address;Delivery / Order Shipment / Package
+Shoe Size;The numeric size designation of a sneaker typically ranging from 0.5 (infant) to 22 (adult);Size / Footwear Size
+Shoe Type;The category or style of footwear (e.g. Sneakers or Boots or Sandals or Dress Shoes);Product Type / Category / Style
+Tracking Number;A unique alphanumeric code provided by shipping carriers to track package location and delivery status;Shipment Tracking / Package Tracking / Tracking Code
+User;A person with a registered account on SneakerPark's platform capable of acting as buyer or seller or both;Account Holder / Customer / Member
+Warehouse;SneakerPark's physical facility where items are received authenticated stored and shipped;Distribution Center / Fulfillment Center

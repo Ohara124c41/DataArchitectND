@@ -1,0 +1,9 @@
+Table;Data Domain;Criticality;Retention Policy;Security Classification;Data Steward
+users;Customers;Critical (99.999% uptime);7 years (unless deletion requested by customer);Confidential;User Service Team
+creditcards;Customers;Critical (99.999% uptime);7 years (unless deletion requested by customer);Highly Confidential (PCI-DSS);User Service Team
+listings;Listings;High (99.99% uptime);Deleted 2 years post-expiration (aggregated metrics retained);Internal;Listing Service Team
+Orders;Orders;Critical (99.999% uptime);7 years (unless deletion requested by customer);Confidential;Order Processing Team
+OrderItems;Orders;Critical (99.999% uptime);7 years (unless deletion requested by customer);Confidential;Order Processing Team
+OrderShipments;Orders;Critical (99.999% uptime);7 years (unless deletion requested by customer);Confidential;Order Processing Team
+Items;Inventory;Moderate (99% uptime);Current data only (no historical tracking);Internal;Warehouse Operations Team
+CustomerServiceRequests;Customers;Critical (99.999% uptime);7 years (part of customer data);Confidential;Customer Service Team

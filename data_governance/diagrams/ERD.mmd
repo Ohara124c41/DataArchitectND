@@ -1,0 +1,102 @@
+erDiagram
+    USER ||--o{ CREDIT_CARD : "owns"
+    USER ||--o{ LISTING : "creates as seller"
+    USER ||--o{ ORDER : "places as buyer"
+    USER ||--o{ CUSTOMER_SERVICE_REQUEST : "submits"
+    USER ||--o{ ITEM : "ships to warehouse"
+
+    CREDIT_CARD ||--o{ ORDER : "used for payment"
+
+    LISTING ||--o{ ORDER_ITEM : "sold as"
+
+    ORDER ||--|{ ORDER_ITEM : "contains"
+    ORDER ||--o{ ORDER_SHIPMENT : "shipped via"
+    ORDER ||--o{ CUSTOMER_SERVICE_REQUEST : "related to"
+
+    ITEM ||--o| LISTING : "listed as"
+
+    USER {
+        int UserID PK
+        varchar FirstName
+        varchar LastName
+        varchar Email
+        varchar Address
+        varchar ZipCode
+    }
+
+    CREDIT_CARD {
+        int CreditCardID PK
+        varchar CreditCardNumber
+        date CreditCardExpirationDate
+        int UserID FK
+    }
+
+    LISTING {
+        int ListingID PK
+        int SellerID FK
+        int ProductID
+        varchar ShoeType
+        varchar Brand
+        varchar Color
+        char Gender
+        varchar Size
+        varchar Condition
+        decimal ListingPrice
+        varchar ListingType
+        date ListingCreateDate
+        date ListingEndDate
+    }
+
+    ORDER {
+        int OrderID PK
+        int BuyerID FK
+        int CreditCardID FK
+        decimal ShippingCost
+        smallint TaxRatePercent
+        decimal TotalAmount
+        varchar ShippingAddress
+        varchar ShippingZipCode
+        timestamp OrderDate
+        varchar Status
+    }
+
+    ORDER_ITEM {
+        int OrderID PK_FK
+        int ListingID PK_FK
+        decimal ListingSoldPrice
+    }
+
+    ORDER_SHIPMENT {
+        int ShipmentID PK
+        int OrderID FK
+        varchar Carrier
+        varchar TrackingNumber
+        date OrderShipDate
+    }
+
+    ITEM {
+        int ItemID PK
+        varchar ItemName
+        int SellerID
+        varchar Type
+        varchar BrandName
+        varchar Color
+        varchar Size
+        varchar Sex
+        varchar Condition
+        varchar ItemStatus
+        date ArrivalDate
+    }
+
+    CUSTOMER_SERVICE_REQUEST {
+        int ID PK
+        int UserID
+        varchar FirstName
+        varchar LastName
+        varchar ContactReason
+        varchar Email
+        varchar Phone
+        int OrderID
+        varchar Resolution
+        varchar ContactMethod
+    }

@@ -1,0 +1,48 @@
+Element;Convention Type;Convention;Example
+Schema Names;Pattern;lowercase abbreviation (2-4 characters);usr / li / op / im / cs
+Schema Names;Current State;Good - already follows best practice;usr (User Service) and li (Listing Service)
+Table Names;Recommended Pattern;lowercase_with_underscores (plural nouns);users / credit_cards / order_items
+Table Names;Current State - Good;Lowercase plural nouns;users / listings / creditcards
+Table Names;Current State - Needs Fix;PascalCase (inconsistent);Orders / OrderItems / OrderShipments / Items / CustomerServiceRequests
+Table Names;Improvement Needed;Add underscores for compound words;creditcards → credit_cards
+Table Names;Improvement Needed;Convert to lowercase;Orders → orders and Items → items
+Column Names;Recommended Pattern;lowercase_with_underscores (singular descriptive);user_id / first_name / listing_price
+Column Names;Current State;PascalCase (inconsistent);UserID / FirstName / ListingPrice
+Column Names;Improvement Needed;Convert all to snake_case;UserID → user_id and FirstName → first_name
+Primary Key Columns;Recommended Pattern;{table_singular}_id;user_id / order_id / listing_id
+Primary Key Columns;Current State;{Entity}ID in PascalCase;UserID / OrderID / ListingID
+Foreign Key Columns;Recommended Pattern;{referenced_table_singular}_id;user_id (for buyer/seller) and credit_card_id
+Foreign Key Columns;Current State;Role-based naming (acceptable);BuyerID and SellerID (both reference UserID)
+Date/Time Columns;Recommended Pattern;{event}_date or {event}_timestamp;created_date / order_timestamp / arrival_date
+Date/Time Columns;Current State - Mixed;Some good patterns;ListingCreateDate / OrderDate / ArrivalDate
+Date/Time Columns;Improvement Needed;Simplify and use snake_case;ListingCreateDate → listing_create_date
+Boolean Columns;Recommended Pattern;is_{condition} or has_{attribute};is_active / has_shipped / is_verified
+Boolean Columns;Current State;Not currently used in schema;N/A - add for future development
+Data Type - Strings;Convention;VARCHAR(n) with appropriate length;VARCHAR(254) for email and VARCHAR(200) for address
+Data Type - Strings;Current Issue;Some lengths too short;Email VARCHAR(50) should be VARCHAR(254) and Address VARCHAR(50) should be VARCHAR(200)
+Data Type - IDs;Convention;INT or BIGINT for auto-increment;Use BIGINT for future scalability
+Data Type - IDs;Current State;INT (acceptable for now);All IDs use INT
+Data Type - Money;Convention;DECIMAL(precision and scale) NOT FLOAT;DECIMAL(8,2) for prices and DECIMAL(10,2) for totals
+Data Type - Money;Current State;Correct usage;ListingPrice DECIMAL(8,2) and TotalAmount DECIMAL(8,2)
+Data Type - Dates;Convention;Use DATE for dates without time;Already using DATE correctly
+Data Type - DateTime;Convention;Use TIMESTAMP (with timezone) for date-times;Already using TIMESTAMP for OrderDate
+Constraints - PK;Naming Pattern;pk_{table_name};pk_users / pk_orders / pk_listings
+Constraints - FK;Naming Pattern;fk_{table_name}_{referenced_table};fk_creditcards_users / fk_orders_users
+Constraints - Unique;Naming Pattern;uq_{table_name}_{column_name};uq_users_email / uq_listings_listing_id
+Constraints - Check;Naming Pattern;chk_{table_name}_{column_name}_{rule};chk_listings_size_range / chk_users_email_format
+Indexes;Naming Pattern;idx_{table_name}_{column_name(s)};idx_listings_seller_id / idx_orders_buyer_id
+Inconsistencies;Field Name Variation;Brand vs BrandName;listings.Brand (li schema) vs Items.BrandName (im schema) - should standardize to 'brand_name'
+Inconsistencies;Field Name Variation;Gender vs Sex;listings.Gender CHAR(1) vs Items.Sex VARCHAR(10) - should standardize to 'gender' VARCHAR(20)
+Inconsistencies;Field Name Variation;ShoeType vs Type;listings.ShoeType vs Items.Type - should standardize to 'shoe_type'
+Inconsistencies;Value Format;Condition capitalization;Inconsistent: 'new' vs 'New' and 'like new' vs 'Open Box' - needs standardization
+Inconsistencies;Value Format;Brand spacing;'New Balance' vs 'NewBalance' and 'Johnston & Murphy' vs 'Johnston and Murphy'
+Inconsistencies;Value Format;Gender representation;'M'/'F' vs 'Male'/'Female' - should use full words consistently
+Abbreviations;Acceptable;Standard industry terms;id (identifier) / num (number) / url / api
+Abbreviations;Avoid;Cryptic shortened words;fname → first_name and addr → address and qty → quantity
+Abbreviations;Domain-Specific;SneakerPark schema names;usr / li / op / im / cs (document in data dictionary)
+Implementation;Phase 1;Document current conventions;Completed in this project
+Implementation;Phase 2;Apply to all new development;Enforce via code review and database migration standards
+Implementation;Phase 3;Gradual remediation;Create views with new names → migrate apps → rename tables
+Implementation;Priority High;Fix capitalization;Orders → orders and Items → items and CustomerServiceRequests → customer_service_requests
+Implementation;Priority Medium;Add underscores to compound words;creditcards → credit_cards
+Implementation;Priority Low;Column renames;UserID → user_id (only during major refactor)

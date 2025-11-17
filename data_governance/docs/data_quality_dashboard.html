@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SneakerPark Data Quality Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0b0c0e;
+            color: #d8d9da;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            background: #1a1d23;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3274d9;
+        }
+
+        .dashboard-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .dashboard-header .subtitle {
+            color: #a7aaad;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .status-critical {
+            background: #e02f44;
+            color: white;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            background: #1a1d23;
+            border-radius: 4px;
+            padding: 15px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2d3035;
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .panel-subtitle {
+            font-size: 11px;
+            color: #a7aaad;
+            margin-top: 3px;
+        }
+
+        .metric-value {
+            font-size: 42px;
+            font-weight: 300;
+            margin: 15px 0;
+            color: #ffffff;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #a7aaad;
+            margin-bottom: 20px;
+        }
+
+        .trend {
+            display: inline-flex;
+            align-items: center;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+
+        .trend-up {
+            background: rgba(224, 47, 68, 0.15);
+            color: #e02f44;
+        }
+
+        .trend-down {
+            background: rgba(115, 191, 105, 0.15);
+            color: #73bf69;
+        }
+
+        .trend-stable {
+            background: rgba(255, 152, 48, 0.15);
+            color: #ff9830;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-critical-ind {
+            background: rgba(224, 47, 68, 0.2);
+            color: #e02f44;
+            border: 1px solid #e02f44;
+        }
+
+        .status-warning {
+            background: rgba(255, 152, 48, 0.2);
+            color: #ff9830;
+            border: 1px solid #ff9830;
+        }
+
+        .status-good {
+            background: rgba(115, 191, 105, 0.2);
+            color: #73bf69;
+            border: 1px solid #73bf69;
+        }
+
+        .data-quality-rule {
+            background: #252932;
+            padding: 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            color: #a7aaad;
+            margin-top: 15px;
+            border-left: 3px solid #3274d9;
+        }
+
+        .chart-panel {
+            grid-column: 1 / -1;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 200px;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(180deg, #3274d9 0%, #1f4788 100%);
+            border-radius: 3px 3px 0 0;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 10px;
+            color: #a7aaad;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .table-panel {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .table-panel th {
+            background: #252932;
+            padding: 10px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            border-bottom: 2px solid #3274d9;
+        }
+
+        .table-panel td {
+            padding: 10px;
+            font-size: 12px;
+            border-bottom: 1px solid #2d3035;
+        }
+
+        .table-panel tr:hover {
+            background: #252932;
+        }
+
+        .action-panel {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #1a1d23 0%, #252932 100%);
+            border-left: 4px solid #ff9830;
+        }
+
+        .action-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .action-list li {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: rgba(255, 152, 48, 0.1);
+            border-radius: 3px;
+            font-size: 13px;
+            border-left: 3px solid #ff9830;
+        }
+
+        .action-list li.urgent {
+            background: rgba(224, 47, 68, 0.1);
+            border-left-color: #e02f44;
+        }
+
+        .footer-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1d23;
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .sparkline {
+            display: flex;
+            align-items: flex-end;
+            height: 40px;
+            gap: 2px;
+            margin-top: 10px;
+        }
+
+        .sparkline-bar {
+            flex: 1;
+            background: #3274d9;
+            border-radius: 1px;
+            opacity: 0.7;
+        }
+
+        .percentage-ring {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(#e02f44 0deg, #e02f44 calc(15.2 * 3.6deg), #252932 calc(15.2 * 3.6deg), #252932 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .percentage-ring::before {
+            content: '';
+            width: 70px;
+            height: 70px;
+            background: #1a1d23;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .percentage-ring-text {
+            position: relative;
+            z-index: 1;
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <h1>📊 SneakerPark Data Quality Dashboard</h1>
+        <div class="subtitle">Real-time Monitoring | Last Updated: 2025-11-17 14:30 UTC</div>
+        <div class="subtitle">Database: sneakerpark_production | Refresh Rate: 15 minutes</div>
+        <span class="status-badge status-critical">🔴 3 CRITICAL ISSUES</span>
+    </div>
+
+    <!-- Main Metrics Grid -->
+    <div class="dashboard-grid">
+        <!-- Metric 1: Missing ShoeType -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">📋 Metric 1: Listing Completeness</div>
+                    <div class="panel-subtitle">li.listings | ShoeType Column</div>
+                </div>
+                <span class="status-indicator status-critical-ind">Critical</span>
+            </div>
+            <div class="metric-value">847</div>
+            <div class="metric-label">NULL values in ShoeType (15.2% of listings)</div>
+            <div class="trend trend-up">↑ +2.3% from last week</div>
+            <div class="sparkline">
+                <div class="sparkline-bar" style="height: 50%;"></div>
+                <div class="sparkline-bar" style="height: 55%;"></div>
+                <div class="sparkline-bar" style="height: 60%;"></div>
+                <div class="sparkline-bar" style="height: 70%;"></div>
+                <div class="sparkline-bar" style="height: 75%;"></div>
+                <div class="sparkline-bar" style="height: 80%;"></div>
+                <div class="sparkline-bar" style="height: 85%;"></div>
+                <div class="sparkline-bar" style="height: 100%; background: #e02f44;"></div>
+            </div>
+            <div class="data-quality-rule">
+                <strong>DQ Rule:</strong> Every listing must have a shoe type specified to help customers find the right product
+            </div>
+        </div>
+
+        <!-- Metric 2: Name Mismatches -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">👤 Metric 2: Customer Data Consistency</div>
+                    <div class="panel-subtitle">cs.CustomerServiceRequests vs usr.users</div>
+                </div>
+                <span class="status-indicator status-warning">Warning</span>
+            </div>
+            <div class="metric-value">23</div>
+            <div class="metric-label">Name mismatches (3.8% of CS requests)</div>
+            <div class="trend trend-down">↓ -1.2% from last week (improving)</div>
+            <div class="sparkline">
+                <div class="sparkline-bar" style="height: 100%; background: #ff9830;"></div>
+                <div class="sparkline-bar" style="height: 95%; background: #ff9830;"></div>
+                <div class="sparkline-bar" style="height: 90%; background: #ff9830;"></div>
+                <div class="sparkline-bar" style="height: 85%; background: #ff9830;"></div>
+                <div class="sparkline-bar" style="height: 80%; background: #ff9830;"></div>
+                <div class="sparkline-bar" style="height: 75%; background: #ff9830;"></div>
+                <div class="sparkline-bar" style="height: 70%; background: #ff9830;"></div>
+                <div class="sparkline-bar" style="height: 65%; background: #ff9830;"></div>
+            </div>
+            <div class="data-quality-rule">
+                <strong>DQ Rule:</strong> A customer's name in any system must exactly match the name in the User Service system of record
+            </div>
+        </div>
+
+        <!-- Metric 3: Invalid Sizes -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">👟 Metric 3: Listing Data Validity</div>
+                    <div class="panel-subtitle">li.listings | Size Column</div>
+                </div>
+                <span class="status-indicator status-good">Good</span>
+            </div>
+            <div class="metric-value">12</div>
+            <div class="metric-label">Invalid shoe sizes (0.2% of listings)</div>
+            <div class="trend trend-down">↓ -0.5% from last week</div>
+            <div class="sparkline">
+                <div class="sparkline-bar" style="height: 70%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 65%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 60%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 55%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 50%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 45%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 40%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 35%; background: #73bf69;"></div>
+            </div>
+            <div class="data-quality-rule">
+                <strong>DQ Rule:</strong> Every shoe listing must have a valid size between 0.5 and 22 to ensure accurate product information
+            </div>
+        </div>
+
+        <!-- Metric 4: Missing ArrivalDate -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">📦 Metric 4: Inventory Timeliness</div>
+                    <div class="panel-subtitle">im.Items | ArrivalDate Column</div>
+                </div>
+                <span class="status-indicator status-critical-ind">Critical</span>
+            </div>
+            <div class="metric-value">156</div>
+            <div class="metric-label">Missing arrival dates (8.7% of items)</div>
+            <div class="trend trend-up">↑ +1.1% from last week</div>
+            <div class="sparkline">
+                <div class="sparkline-bar" style="height: 60%;"></div>
+                <div class="sparkline-bar" style="height: 65%;"></div>
+                <div class="sparkline-bar" style="height: 70%;"></div>
+                <div class="sparkline-bar" style="height: 75%;"></div>
+                <div class="sparkline-bar" style="height: 80%;"></div>
+                <div class="sparkline-bar" style="height: 85%;"></div>
+                <div class="sparkline-bar" style="height: 95%;"></div>
+                <div class="sparkline-bar" style="height: 100%; background: #e02f44;"></div>
+            </div>
+            <div class="data-quality-rule">
+                <strong>DQ Rule:</strong> Every item received at the warehouse must have an arrival date recorded to track the 45-day listing deadline
+            </div>
+        </div>
+
+        <!-- Metric 5: Duplicate Accounts -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">🔄 Metric 5: Account Uniqueness</div>
+                    <div class="panel-subtitle">usr.users | Email, Name, ZipCode</div>
+                </div>
+                <span class="status-indicator status-good">Good</span>
+            </div>
+            <div class="metric-value">8</div>
+            <div class="metric-label">Potential duplicates (0.08% of users)</div>
+            <div class="trend trend-stable">→ Stable from last week</div>
+            <div class="sparkline">
+                <div class="sparkline-bar" style="height: 20%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 20%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 25%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 20%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 20%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 20%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 20%; background: #73bf69;"></div>
+                <div class="sparkline-bar" style="height: 20%; background: #73bf69;"></div>
+            </div>
+            <div class="data-quality-rule">
+                <strong>DQ Rule:</strong> Each person should have only one user account to maintain accurate customer history and prevent fraud
+            </div>
+        </div>
+
+        <!-- Trend Chart -->
+        <div class="panel chart-panel">
+            <div class="panel-header">
+                <div class="panel-title">📈 Trend Analysis: Completeness Issues Over Time (Last 8 Weeks)</div>
+            </div>
+            <div class="bar-chart">
+                <div class="bar" style="height: 50%;">
+                    <div class="bar-value">12%</div>
+                    <div class="bar-label">Week 1</div>
+                </div>
+                <div class="bar" style="height: 55%;">
+                    <div class="bar-value">13%</div>
+                    <div class="bar-label">Week 2</div>
+                </div>
+                <div class="bar" style="height: 60%;">
+                    <div class="bar-value">13.5%</div>
+                    <div class="bar-label">Week 3</div>
+                </div>
+                <div class="bar" style="height: 65%;">
+                    <div class="bar-value">14%</div>
+                    <div class="bar-label">Week 4</div>
+                </div>
+                <div class="bar" style="height: 70%;">
+                    <div class="bar-value">14.5%</div>
+                    <div class="bar-label">Week 5</div>
+                </div>
+                <div class="bar" style="height: 75%;">
+                    <div class="bar-value">14.8%</div>
+                    <div class="bar-label">Week 6</div>
+                </div>
+                <div class="bar" style="height: 80%;">
+                    <div class="bar-value">15%</div>
+                    <div class="bar-label">Week 7</div>
+                </div>
+                <div class="bar" style="height: 85%; background: linear-gradient(180deg, #e02f44 0%, #a01f2f 100%);">
+                    <div class="bar-value" style="color: #e02f44;">15.2%</div>
+                    <div class="bar-label">Week 8</div>
+                </div>
+            </div>
+            <div style="margin-top: 50px; font-size: 11px; color: #a7aaad;">
+                <strong style="color: #3274d9;">━━</strong> Missing ShoeType (li.listings) trending upward - requires immediate attention
+            </div>
+        </div>
+
+        <!-- Priority Table -->
+        <div class="panel chart-panel">
+            <div class="panel-header">
+                <div class="panel-title">🎯 Top Data Quality Issues by Priority</div>
+            </div>
+            <table class="table-panel">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Issue</th>
+                        <th>Table</th>
+                        <th>Column</th>
+                        <th>Count</th>
+                        <th>Impact %</th>
+                        <th>Status</th>
+                        <th>Owner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Missing ShoeType</td>
+                        <td>li.listings</td>
+                        <td>ShoeType</td>
+                        <td>847</td>
+                        <td>15.2%</td>
+                        <td><span class="status-indicator status-critical-ind">Critical</span></td>
+                        <td>Listing Service Team</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Missing ArrivalDate</td>
+                        <td>im.Items</td>
+                        <td>ArrivalDate</td>
+                        <td>156</td>
+                        <td>8.7%</td>
+                        <td><span class="status-indicator status-critical-ind">Critical</span></td>
+                        <td>Warehouse Operations</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Name Mismatches</td>
+                        <td>cs.CustomerServiceRequests</td>
+                        <td>FirstName, LastName</td>
+                        <td>23</td>
+                        <td>3.8%</td>
+                        <td><span class="status-indicator status-warning">Warning</span></td>
+                        <td>Customer Service Team</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Invalid Sizes</td>
+                        <td>li.listings</td>
+                        <td>Size</td>
+                        <td>12</td>
+                        <td>0.2%</td>
+                        <td><span class="status-indicator status-good">Good</span></td>
+                        <td>Listing Service Team</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Duplicate Accounts</td>
+                        <td>usr.users</td>
+                        <td>Multiple</td>
+                        <td>8</td>
+                        <td>0.08%</td>
+                        <td><span class="status-indicator status-good">Good</span></td>
+                        <td>User Service Team</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Action Items -->
+        <div class="panel action-panel">
+            <div class="panel-header">
+                <div class="panel-title">🎯 Required Action Items</div>
+            </div>
+            <ul class="action-list">
+                <li class="urgent"><strong>[URGENT - Critical]</strong> Fix missing ShoeType (847 records) - Backfill from im.Items.Type field</li>
+                <li class="urgent"><strong>[URGENT - Critical]</strong> Populate missing ArrivalDate (156 records) - Use shipping logs for backfill</li>
+                <li><strong>[HIGH - Warning]</strong> Review and correct 23 customer name mismatches between CS and User Service systems</li>
+                <li><strong>[MEDIUM]</strong> Add dropdown validation for shoe sizes at listing entry point to prevent invalid values</li>
+                <li><strong>[LOW - Monitoring]</strong> Continue monitoring duplicate account detection - currently within acceptable limits</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Dashboard Footer Controls -->
+    <div class="footer-controls">
+        <div class="control-group">
+            <div class="control-item">
+                <span>🔄</span>
+                <span>Auto-Refresh: Every 15 minutes</span>
+            </div>
+            <div class="control-item">
+                <span>📧</span>
+                <span>Email Alerts: Enabled (Critical issues → data-quality-team@sneakerpark.com)</span>
+            </div>
+            <div class="control-item">
+                <span>🔔</span>
+                <span>Slack: #data-quality</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <button style="padding: 8px 16px; background: #3274d9; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px;">📊 Export PDF</button>
+            <button style="padding: 8px 16px; background: #3274d9; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px;">📊 Export Excel</button>
+            <button style="padding: 8px 16px; background: #3274d9; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px;">📊 Export CSV</button>
+        </div>
+    </div>
+
+</body>
+</html>

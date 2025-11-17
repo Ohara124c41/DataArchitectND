@@ -1,0 +1,63 @@
+Entity;Source System;Table Name;Column Name;Data Type;Required;Unique;Description;Value Example;Primary Key;Foreign Key;Foreign Key Table;Foreign Key Column
+User;User Service;users;UserID;INT;Yes;Yes;Unique identifier for user account;80527;Yes;No;;
+User;User Service;users;FirstName;VARCHAR(50);Yes;No;User's first name;Emerson;No;No;;
+User;User Service;users;LastName;VARCHAR(50);Yes;No;User's last name;Wire;No;No;;
+User;User Service;users;Email;VARCHAR(50);Yes;No;User's email address for account;emerson.wire@netscape.com;No;No;;
+User;User Service;users;Address;VARCHAR(50);Yes;No;User's street address;2 Harris PIace;No;No;;
+User;User Service;users;ZipCode;VARCHAR(10);Yes;No;User's postal zip code;13835;No;No;;
+Credit Card;User Service;creditcards;CreditCardID;INT;Yes;Yes;Unique identifier for credit card record;101;Yes;No;;
+Credit Card;User Service;creditcards;CreditCardNumber;VARCHAR(50);Yes;No;Credit card number (should be encrypted);4111111111111111;No;No;;
+Credit Card;User Service;creditcards;CreditCardExpirationDate;DATE;Yes;No;Credit card expiration date;2025-12-31;No;No;;
+Credit Card;User Service;creditcards;UserID;INT;Yes;No;Reference to user who owns the card;80527;No;Yes;users;UserID
+Listing;Listing Service;listings;ListingID;INT;Yes;Yes;Unique identifier for listing;922399;Yes;No;;
+Listing;Listing Service;listings;SellerID;INT;Yes;No;Reference to user creating listing (seller);25516;No;Yes;users;UserID
+Listing;Listing Service;listings;ProductID;INT;Yes;No;Reference to physical item being listed;509;No;No;;
+Listing;Listing Service;listings;ShoeType;VARCHAR(50);No;No;Type/style of shoe (e.g. sneaker or boot);Sandals or Flip Flops;No;No;;
+Listing;Listing Service;listings;Brand;VARCHAR(50);No;No;Shoe brand manufacturer name;UnderArmor;No;No;;
+Listing;Listing Service;listings;Color;VARCHAR(15);No;No;Primary color of the shoe;brown;No;No;;
+Listing;Listing Service;listings;Gender;CHAR(1);No;No;Target gender (M/F/U for unisex);F;No;No;;
+Listing;Listing Service;listings;Size;VARCHAR(4);No;No;Shoe size;12;No;No;;
+Listing;Listing Service;listings;Condition;VARCHAR(50);Yes;No;Condition of shoe (new or used etc.);Used;No;No;;
+Listing;Listing Service;listings;ListingPrice;DECIMAL(8,2);Yes;No;Asking price or starting bid amount;52.00;No;No;;
+Listing;Listing Service;listings;ListingType;VARCHAR(20);Yes;No;Type of listing (auction or buy-now etc.);Auction;No;No;;
+Listing;Listing Service;listings;ListingCreateDate;DATE;Yes;No;Date listing was created;2020-10-06;No;No;;
+Listing;Listing Service;listings;ListingEndDate;DATE;No;No;Date listing ends or ended;2020-12-30;No;No;;
+Order;Order Processing Service;Orders;OrderID;INT;Yes;Yes;Unique identifier for order;12345;Yes;No;;
+Order;Order Processing Service;Orders;BuyerID;INT;Yes;No;Reference to user placing order (buyer);80527;No;Yes;users;UserID
+Order;Order Processing Service;Orders;CreditCardID;INT;Yes;No;Reference to payment method used;101;No;Yes;creditcards;CreditCardID
+Order;Order Processing Service;Orders;ShippingCost;DECIMAL(5,2);Yes;No;Cost to ship order to buyer;9.99;No;No;;
+Order;Order Processing Service;Orders;TaxRatePercent;SMALLINT;Yes;No;Tax rate percentage applied to order;7;No;No;;
+Order;Order Processing Service;Orders;TotalAmount;DECIMAL(8,2);Yes;No;Total order amount including tax and shipping;99.99;No;No;;
+Order;Order Processing Service;Orders;ShippingAddress;VARCHAR(100);No;No;Delivery address for order;123 Main Street;No;No;;
+Order;Order Processing Service;Orders;ShippingZipCode;VARCHAR(10);Yes;No;Delivery zip code for order;12345;No;No;;
+Order;Order Processing Service;Orders;OrderDate;TIMESTAMP;Yes;No;Date and time order was placed;2020-10-15 14:30:00;No;No;;
+Order;Order Processing Service;Orders;Status;VARCHAR(50);No;No;Current status of order (processing or shipped etc.);shipped;No;No;;
+Order Item;Order Processing Service;OrderItems;OrderID;INT;Yes;No;Reference to parent order;12345;Yes;Yes;Orders;OrderID
+Order Item;Order Processing Service;OrderItems;ListingID;INT;Yes;No;Reference to listing being purchased;922399;Yes;Yes;listings;ListingID
+Order Item;Order Processing Service;OrderItems;ListingSoldPrice;DECIMAL(8,2);No;No;Final sale price of the listing;52.00;No;No;;
+Order Shipment;Order Processing Service;OrderShipments;ShipmentID;INT;Yes;Yes;Unique identifier for shipment record;67890;Yes;No;;
+Order Shipment;Order Processing Service;OrderShipments;OrderID;INT;Yes;No;Reference to order being shipped;12345;No;Yes;Orders;OrderID
+Order Shipment;Order Processing Service;OrderShipments;Carrier;VARCHAR(50);Yes;No;Shipping carrier name (UPS or FedEx etc.);UPS;No;No;;
+Order Shipment;Order Processing Service;OrderShipments;TrackingNumber;VARCHAR(30);No;No;Carrier tracking number for package;1Z999AA10123456784;No;No;;
+Order Shipment;Order Processing Service;OrderShipments;OrderShipDate;DATE;Yes;No;Date order was shipped;2020-10-16;No;No;;
+Item;Inventory Management System;Items;ItemID;INT;Yes;Yes;Unique identifier assigned upon warehouse receipt;2333;Yes;No;;
+Item;Inventory Management System;Items;ItemName;VARCHAR(100);Yes;No;Descriptive name of the item;Gisela;No;No;;
+Item;Inventory Management System;Items;SellerID;INT;Yes;No;Reference to seller who shipped item (no FK constraint);99900;No;No;;
+Item;Inventory Management System;Items;Type;VARCHAR(50);Yes;No;Type/category of footwear;Sandals;No;No;;
+Item;Inventory Management System;Items;BrandName;VARCHAR(100);Yes;No;Brand manufacturer name;Puma;No;No;;
+Item;Inventory Management System;Items;Color;VARCHAR(15);Yes;No;Primary color of the item;brown;No;No;;
+Item;Inventory Management System;Items;Size;VARCHAR(4);Yes;No;Shoe size;14;No;No;;
+Item;Inventory Management System;Items;Sex;VARCHAR(10);Yes;No;Target gender/sex;Male;No;No;;
+Item;Inventory Management System;Items;Condition;VARCHAR(50);Yes;No;Physical condition of item;like new;No;No;;
+Item;Inventory Management System;Items;ItemStatus;VARCHAR(50);No;No;Current status (received or authenticated or listed or returned);approved;No;No;;
+Item;Inventory Management System;Items;ArrivalDate;DATE;No;No;Date item arrived at warehouse;2020-09-29;No;No;;
+Customer Service Request;Customer Service Application;CustomerServiceRequests;ID;INT;Yes;Yes;Unique identifier for service request;822950;Yes;No;;
+Customer Service Request;Customer Service Application;CustomerServiceRequests;UserID;INT;Yes;No;Reference to user submitting request (no FK constraint);3586;No;No;;
+Customer Service Request;Customer Service Application;CustomerServiceRequests;FirstName;VARCHAR(50);Yes;No;First name of requester (denormalized);Bobby;No;No;;
+Customer Service Request;Customer Service Application;CustomerServiceRequests;LastName;VARCHAR(50);Yes;No;Last name of requester (denormalized);Vamderheydem;No;No;;
+Customer Service Request;Customer Service Application;CustomerServiceRequests;ContactReason;VARCHAR(50);Yes;No;Reason for contacting support;Return;No;No;;
+Customer Service Request;Customer Service Application;CustomerServiceRequests;Email;VARCHAR(50);No;No;Contact email (may differ from account email);bobby.vanderheyden@fakeemail.com;No;No;;
+Customer Service Request;Customer Service Application;CustomerServiceRequests;Phone;VARCHAR(50);No;No;Contact phone number;(594) 811-5626;No;No;;
+Customer Service Request;Customer Service Application;CustomerServiceRequests;OrderID;INT;No;No;Reference to related order if applicable (no FK constraint);12802;No;No;;
+Customer Service Request;Customer Service Application;CustomerServiceRequests;Resolution;VARCHAR(50);Yes;No;How the request was resolved;Provided Information;No;No;;
+Customer Service Request;Customer Service Application;CustomerServiceRequests;ContactMethod;VARCHAR(50);Yes;No;How customer contacted support (phone or email or chat);Phone;No;No;;
