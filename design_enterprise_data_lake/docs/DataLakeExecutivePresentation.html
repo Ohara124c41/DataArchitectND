@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Lake Value Proposition - Medical Data Processing Company</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px 80px;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: #009999;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 153, 153, 0.3);
+        }
+
+        .nav-btn:hover {
+            background: #007777;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 153, 153, 0.4);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, #009999 0%, #006666 100%);
+            color: white;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title-slide h1 {
+            font-size: 64px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .title-slide h2 {
+            font-size: 32px;
+            font-weight: 400;
+            opacity: 0.95;
+            margin-bottom: 60px;
+        }
+
+        .title-slide .subtitle {
+            font-size: 20px;
+            opacity: 0.85;
+            margin-top: 40px;
+        }
+
+        /* Content Slides */
+        .slide h1 {
+            font-size: 48px;
+            color: #009999;
+            margin-bottom: 50px;
+            font-weight: 700;
+        }
+
+        .slide h2 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        /* Agenda */
+        .agenda-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        .agenda-item {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            border-left: 5px solid #009999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .agenda-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(0, 153, 153, 0.15);
+        }
+
+        .agenda-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .agenda-item h3 {
+            font-size: 24px;
+            color: #009999;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .agenda-item p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* What is Data Lake */
+        .definition-box {
+            background: linear-gradient(135deg, rgba(0, 153, 153, 0.1) 0%, rgba(0, 153, 153, 0.05) 100%);
+            padding: 60px;
+            border-radius: 16px;
+            border: 3px solid #009999;
+            max-width: 1200px;
+        }
+
+        .definition-box p {
+            font-size: 28px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .definition-box .highlight {
+            color: #009999;
+            font-weight: 600;
+        }
+
+        /* Components Grid (4 cards) */
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        .component-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            border-left: 5px solid #009999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .component-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 153, 153, 0.15);
+        }
+
+        .component-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .component-card h3 {
+            font-size: 28px;
+            color: #009999;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .component-card p {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Value Cards (6 cards) */
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            max-width: 1200px;
+        }
+
+        .value-card {
+            background: linear-gradient(135deg, #009999 0%, #007777 100%);
+            padding: 35px;
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 4px 16px rgba(0, 153, 153, 0.3);
+            transition: all 0.3s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 153, 153, 0.4);
+        }
+
+        .value-card h3 {
+            font-size: 26px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .value-card p {
+            font-size: 17px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        /* Comparison */
+        .comparison-intro {
+            background: white;
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 1200px;
+        }
+
+        .comparison-intro p {
+            font-size: 26px;
+            line-height: 1.8;
+            color: #333;
+            text-align: center;
+        }
+
+        .comparison-table {
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: #009999;
+            color: white;
+            padding: 25px;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 20px 25px;
+            font-size: 17px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(0, 153, 153, 0.05);
+        }
+
+        .comparison-table td:first-child {
+            background: #f8f8f8;
+            font-weight: 500;
+        }
+
+        .comparison-table td:last-child {
+            background: rgba(0, 153, 153, 0.05);
+        }
+
+        /* Architecture Placeholder */
+        .architecture-box {
+            background: white;
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            max-width: 1200px;
+        }
+
+        .architecture-placeholder {
+            background: linear-gradient(135deg, rgba(0, 153, 153, 0.1) 0%, rgba(0, 153, 153, 0.05) 100%);
+            border: 3px dashed #009999;
+            border-radius: 12px;
+            padding: 100px;
+            font-size: 24px;
+            color: #009999;
+            font-weight: 600;
+            margin: 30px 0;
+        }
+
+        .architecture-highlights {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .highlight-item {
+            padding: 20px;
+            background: rgba(0, 153, 153, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid #009999;
+        }
+
+        .highlight-item h4 {
+            color: #009999;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .highlight-item p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* Thank You Slide */
+        .thank-you-slide {
+            background: linear-gradient(135deg, #009999 0%, #006666 100%);
+            color: white;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .thank-you-slide h1 {
+            font-size: 80px;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .thank-you-slide p {
+            font-size: 32px;
+            opacity: 0.9;
+            margin-bottom: 60px;
+        }
+
+        .next-steps {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px 50px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 40px;
+        }
+
+        .next-steps h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .next-steps ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .next-steps li {
+            font-size: 18px;
+            margin: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .next-steps li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .slide {
+                padding: 40px 50px;
+            }
+            .slide h1 {
+                font-size: 40px;
+            }
+            .value-grid,
+            .components-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .slide {
+                display: flex !important;
+                page-break-after: always;
+            }
+            .nav-controls,
+            .slide-counter {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide active title-slide">
+        <h1>Data Lake Value Proposition</h1>
+        <h2>Medical Data Processing Company</h2>
+        <div class="subtitle">Transforming Data Infrastructure for Scalable Growth</div>
+    </div>
+
+    <!-- Slide 2: Agenda -->
+    <div class="slide">
+        <h1>Today's Discussion</h1>
+        <div class="agenda-grid">
+            <div class="agenda-item">
+                <div class="agenda-icon">📊</div>
+                <h3>What is a Data Lake</h3>
+                <p>Modern approach to enterprise data</p>
+            </div>
+            <div class="agenda-item">
+                <div class="agenda-icon">🏗️</div>
+                <h3>Components</h3>
+                <p>Building blocks for unlimited scale</p>
+            </div>
+            <div class="agenda-item">
+                <div class="agenda-icon">⚖️</div>
+                <h3>Data Lake vs Warehouse</h3>
+                <p>Why traditional approaches fail</p>
+            </div>
+            <div class="agenda-item">
+                <div class="agenda-icon">💰</div>
+                <h3>Business Value</h3>
+                <p>Tangible benefits and ROI</p>
+            </div>
+            <div class="agenda-item">
+                <div class="agenda-icon">🎯</div>
+                <h3>Proposed Architecture</h3>
+                <p>Our path to operational excellence</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: What is a Data Lake -->
+    <div class="slide">
+        <h1>What is a Data Lake?</h1>
+        <div class="definition-box">
+            <p><span class="highlight">Centralized repository</span> that stores all enterprise data at any scale</p>
+            <p><span class="highlight">Eliminates capacity constraints</span> - no more forced deletions or expensive upgrades</p>
+            <p><span class="highlight">Real-time processing</span> replaces nightly batch windows</p>
+            <p><span class="highlight">Open-source technology</span> - no vendor lock-in</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: Components -->
+    <div class="slide">
+        <h1>Components of a Data Lake</h1>
+        <div class="components-grid">
+            <div class="component-card">
+                <span class="component-icon">📥</span>
+                <h3>Ingestion Layer</h3>
+                <p>Collects data from 8,000 facilities in real-time. Handles 77,000 files daily with automatic validation and routing.</p>
+            </div>
+            <div class="component-card">
+                <span class="component-icon">💾</span>
+                <h3>Storage Layer</h3>
+                <p>Unlimited capacity distributed storage with 3x replication. Eliminates the 8TB SQL Server bottleneck.</p>
+            </div>
+            <div class="component-card">
+                <span class="component-icon">⚙️</span>
+                <h3>Processing Layer</h3>
+                <p>Unified platform for batch, streaming, and SQL analytics. Replaces 70+ custom ETL scripts with metadata-driven automation.</p>
+            </div>
+            <div class="component-card">
+                <span class="component-icon">📊</span>
+                <h3>Serving Layer</h3>
+                <p>Optimized access for dashboards, reports, ML, and applications. Sub-second query performance at scale.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Comparison Intro -->
+    <div class="slide">
+        <h1>Data Lake vs Data Warehouse</h1>
+        <div class="comparison-intro">
+            <p>Data warehouses require extensive planning before storing information.</p>
+            <p style="margin-top: 30px;">Data lakes accept information in original form with flexibility for multiple uses.</p>
+            <p style="margin-top: 30px; color: #009999; font-weight: 600;">Our current SQL Server operates as a data warehouse - explaining our performance problems.</p>
+        </div>
+    </div>
+
+    <!-- Slide 6: Comparison Table -->
+    <div class="slide">
+        <h1>Side-by-Side Comparison</h1>
+        <div class="comparison-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Data Warehouse (Current)</th>
+                        <th>Data Lake (Proposed)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Capacity</strong></td>
+                        <td>Fixed storage, requires hardware replacement</td>
+                        <td>Unlimited, grows by adding standard servers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Flexibility</strong></td>
+                        <td>Rigid structure, months to add sources</td>
+                        <td>Accepts any format immediately</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Processing</strong></td>
+                        <td>Nightly batch only</td>
+                        <td>Real-time + batch + interactive</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cost</strong></td>
+                        <td>Expensive proprietary licensing</td>
+                        <td>Open-source, no vendor lock-in</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reliability</strong></td>
+                        <td>Single point of failure</td>
+                        <td>Fault-tolerant, no downtime</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use Cases</strong></td>
+                        <td>Reports only</td>
+                        <td>Reports + dashboards + ML + apps</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 7: Business Value -->
+    <div class="slide">
+        <h1>Business Value Delivered</h1>
+        <div class="value-grid">
+            <div class="value-card">
+                <h3>Eliminate Downtime</h3>
+                <p>Fault-tolerant architecture prevents database crashes</p>
+            </div>
+            <div class="value-card">
+                <h3>Real-time Insights</h3>
+                <p>Move from nightly batch to continuous processing</p>
+            </div>
+            <div class="value-card">
+                <h3>Unlimited Scale</h3>
+                <p>Accommodate 20% annual growth without limits</p>
+            </div>
+            <div class="value-card">
+                <h3>Reduced Costs</h3>
+                <p>Open-source stack eliminates vendor licensing</p>
+            </div>
+            <div class="value-card">
+                <h3>Faster Innovation</h3>
+                <p>ML and analytics without data movement</p>
+            </div>
+            <div class="value-card">
+                <h3>Operational Efficiency</h3>
+                <p>Replace 70+ custom scripts with automation</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Architecture -->
+    <div class="slide">
+        <h1>Proposed Architecture</h1>
+        <div class="architecture-box">
+            <div class="architecture-placeholder">
+                [INSERT ARCHITECTURE DIAGRAM HERE]
+                <br><br>
+                <span style="font-size: 18px; opacity: 0.7;">DataLakeSolutionArchitecture-Simplified diagram</span>
+            </div>
+            <div class="architecture-highlights">
+                <div class="highlight-item">
+                    <h4>🔵 Collection Layer</h4>
+                    <p>77,000 files/day from 8,000 facilities</p>
+                </div>
+                <div class="highlight-item">
+                    <h4>🟢 Storage Layer</h4>
+                    <p>Unlimited capacity, 3x fault tolerance</p>
+                </div>
+                <div class="highlight-item">
+                    <h4>🟠 Processing Layer</h4>
+                    <p>Real-time + batch analytics at scale</p>
+                </div>
+                <div class="highlight-item">
+                    <h4>🟣 Delivery Layer</h4>
+                    <p>Dashboards, reports, ML, applications</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Thank You -->
+    <div class="slide thank-you-slide">
+        <h1>Thank You</h1>
+        <p>Questions & Discussion</p>
+        <div class="next-steps">
+            <h3>Next Steps</h3>
+            <ul>
+                <li>Executive decision on project approval</li>
+                <li>Budget allocation and timeline</li>
+                <li>Implementation team mobilization</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">9</span>
+    </div>
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        }
+    </script>
+</body>
+</html>

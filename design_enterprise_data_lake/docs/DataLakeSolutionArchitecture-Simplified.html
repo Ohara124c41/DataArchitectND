@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Lake Architecture - High-Level Overview</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a73e8;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        h2 {
+            color: #555;
+            text-align: center;
+            font-weight: normal;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        .diagram-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .highlight-card {
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #1a73e8;
+            background-color: #f9f9f9;
+        }
+        .highlight-card h3 {
+            margin-top: 0;
+            color: #1a73e8;
+            font-size: 16px;
+        }
+        .highlight-card p {
+            margin: 10px 0 0 0;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .value-props {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 5px;
+        }
+        .value-props h3 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .value-item {
+            padding: 15px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 3px;
+        }
+        .value-item strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+        .value-item span {
+            font-size: 13px;
+            opacity: 0.95;
+        }
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .legend h3 {
+            color: #333;
+            margin-top: 0;
+        }
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+        .legend-box {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            border: 2px solid #333;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        .ingestion { background-color: #E1F5FF; border-color: #01579B; }
+        .storage { background-color: #E8F5E9; border-color: #1B5E20; }
+        .processing { background-color: #FFF3E0; border-color: #E65100; }
+        .serving { background-color: #F3E5F5; border-color: #4A148C; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Data Lake Solution Architecture</h1>
+        <h2>High-Level Overview - Medical Data Processing Company</h2>
+        
+        <div class="diagram-container">
+            <div class="mermaid">
+graph TB
+    subgraph Sources["Data Sources"]
+        MedicalFacilities["8,000 Medical Facilities<br/>77,000 Files/Day<br/>15M Records/Day"]
+    end
+
+    subgraph Ingestion["INGESTION LAYER<br/>Real-time & Batch Data Collection"]
+        IngestionTools["Apache Kafka + NiFi<br/>Event Streaming & Data Flow<br/>FTP, API, Database Sources"]
+    end
+
+    subgraph Storage["STORAGE LAYER<br/>Distributed Data Persistence"]
+        DataLake["Hadoop HDFS Data Lake<br/>Unlimited Capacity<br/>3x Fault-Tolerant Replication"]
+        Metadata["Metadata & Governance<br/>Schema Management<br/>Data Lineage"]
+        NoSQL["HBase NoSQL Database<br/>Real-time Access"]
+    end
+
+    subgraph Processing["PROCESSING LAYER<br/>Data Transformation & Analytics"]
+        BatchStream["Apache Spark & Flink<br/>Batch + Stream Processing<br/>Replaces 70+ ETL Scripts"]
+        SQLEngine["SQL Query Engines<br/>Hive & Presto<br/>Interactive Analytics"]
+        Orchestration["Apache Airflow<br/>Workflow Automation<br/>Metadata-Driven"]
+    end
+
+    subgraph Serving["SERVING LAYER<br/>Optimized Data Access"]
+        RealTime["Real-time Analytics<br/>Apache Druid<br/>Sub-second Queries"]
+        DataWarehouse["Data Warehouse<br/>Hive Tables<br/>Historical Analysis"]
+        BI["BI & Visualization<br/>Apache Superset<br/>Dashboards"]
+    end
+
+    subgraph Consumers["Data Consumers"]
+        Dashboards["Real-time<br/>Dashboards"]
+        Reports["SQL<br/>Reports"]
+        ML["Machine<br/>Learning"]
+        Apps["Clinical<br/>Applications"]
+    end
+
+    subgraph Security["Security & Governance"]
+        SecTools["Kerberos • Apache Ranger • Knox<br/>Authentication • Authorization • Encryption"]
+    end
+
+    MedicalFacilities -->|"Continuous<br/>Data Flow"| IngestionTools
+    IngestionTools -->|"Raw<br/>Data"| DataLake
+    IngestionTools -->|"Stream<br/>Data"| NoSQL
+    DataLake <-->|"Schema<br/>Info"| Metadata
+    
+    DataLake -->|"Batch<br/>Processing"| BatchStream
+    DataLake -->|"SQL<br/>Queries"| SQLEngine
+    NoSQL -->|"Real-time<br/>Data"| BatchStream
+    Orchestration -.->|"Schedules &<br/>Monitors"| BatchStream
+    Orchestration -.->|"Schedules &<br/>Monitors"| SQLEngine
+    
+    BatchStream -->|"Aggregated<br/>Metrics"| RealTime
+    BatchStream -->|"Curated<br/>Data"| DataWarehouse
+    SQLEngine -->|"Query<br/>Results"| BI
+    DataWarehouse -->|"Historical<br/>Data"| BI
+    
+    RealTime -->|"Live<br/>Metrics"| Dashboards
+    DataWarehouse -->|"Reports"| Reports
+    BatchStream -->|"Models"| ML
+    NoSQL -->|"Record<br/>Lookup"| Apps
+    BI -->|"Visualizations"| Dashboards
+    
+    SecTools -.->|"Secures All<br/>Layers"| DataLake
+    SecTools -.->|"Secures All<br/>Layers"| BatchStream
+    SecTools -.->|"Secures All<br/>Layers"| NoSQL
+
+    classDef ingestionStyle fill:#E1F5FF,stroke:#01579B,stroke-width:3px,color:#000,font-weight:bold
+    classDef storageStyle fill:#E8F5E9,stroke:#1B5E20,stroke-width:3px,color:#000,font-weight:bold
+    classDef processingStyle fill:#FFF3E0,stroke:#E65100,stroke-width:3px,color:#000,font-weight:bold
+    classDef servingStyle fill:#F3E5F5,stroke:#4A148C,stroke-width:3px,color:#000,font-weight:bold
+    classDef sourceStyle fill:#FAFAFA,stroke:#424242,stroke-width:2px,color:#000
+    classDef consumerStyle fill:#FCE4EC,stroke:#880E4F,stroke-width:2px,color:#000
+    classDef securityStyle fill:#FFFDE7,stroke:#F57F17,stroke-width:2px,stroke-dasharray:5,color:#000
+
+    class IngestionTools ingestionStyle
+    class DataLake,Metadata,NoSQL storageStyle
+    class BatchStream,SQLEngine,Orchestration processingStyle
+    class RealTime,DataWarehouse,BI servingStyle
+    class MedicalFacilities sourceStyle
+    class Dashboards,Reports,ML,Apps consumerStyle
+    class SecTools securityStyle
+            </div>
+        </div>
+
+        <div class="value-props">
+            <h3>Business Value Delivered</h3>
+            <div class="value-grid">
+                <div class="value-item">
+                    <strong>Eliminate Downtime</strong>
+                    <span>Fault-tolerant architecture prevents database crashes</span>
+                </div>
+                <div class="value-item">
+                    <strong>Real-time Insights</strong>
+                    <span>Move from nightly batch to continuous processing</span>
+                </div>
+                <div class="value-item">
+                    <strong>Unlimited Scale</strong>
+                    <span>Accommodate 20% annual growth without limits</span>
+                </div>
+                <div class="value-item">
+                    <strong>Reduced Costs</strong>
+                    <span>Open-source stack eliminates vendor licensing</span>
+                </div>
+                <div class="value-item">
+                    <strong>Faster Innovation</strong>
+                    <span>ML and analytics without data movement</span>
+                </div>
+                <div class="value-item">
+                    <strong>Operational Efficiency</strong>
+                    <span>Replace 70+ custom scripts with automation</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="highlights">
+            <div class="highlight-card">
+                <h3>📥 Ingestion Layer</h3>
+                <p>Collects data from 8,000 facilities in real-time. Handles 77,000 files daily with automatic validation and routing.</p>
+            </div>
+            <div class="highlight-card">
+                <h3>💾 Storage Layer</h3>
+                <p>Unlimited capacity distributed storage with 3x replication. Eliminates the 8TB SQL Server bottleneck.</p>
+            </div>
+            <div class="highlight-card">
+                <h3>⚙️ Processing Layer</h3>
+                <p>Unified platform for batch, streaming, and SQL analytics. Replaces 70+ custom ETL scripts with metadata-driven automation.</p>
+            </div>
+            <div class="highlight-card">
+                <h3>📊 Serving Layer</h3>
+                <p>Optimized access for dashboards, reports, ML, and applications. Sub-second query performance at scale.</p>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h3>Architecture Layers</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <span class="legend-box ingestion"></span>
+                    <strong>Ingestion:</strong> Data collection & streaming
+                </div>
+                <div class="legend-item">
+                    <span class="legend-box storage"></span>
+                    <strong>Storage:</strong> Distributed persistence
+                </div>
+                <div class="legend-item">
+                    <span class="legend-box processing"></span>
+                    <strong>Processing:</strong> Data transformation
+                </div>
+                <div class="legend-item">
+                    <span class="legend-box serving"></span>
+                    <strong>Serving:</strong> Optimized access
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+graph LR
+    subgraph Sources["DATA SOURCES"]
+        MedicalFacilities["8,000 Medical Facilities<br/>77,000 Files/Day<br/>15M Records/Day"]
+    end
+
+    subgraph Ingestion["INGESTION LAYER<br/>Real-time & Batch Collection"]
+        IngestionTools["Apache Kafka + NiFi<br/>Event Streaming & Data Flow<br/>FTP, API, Database Sources"]
+    end
+
+    subgraph Storage["STORAGE LAYER<br/>Distributed Persistence"]
+        DataLake["Hadoop HDFS Data Lake<br/>Unlimited Capacity<br/>3x Fault-Tolerant"]
+        Metadata["Metadata & Governance<br/>Schema Management"]
+        NoSQL["HBase NoSQL<br/>Real-time Access"]
+    end
+
+    subgraph Processing["PROCESSING LAYER<br/>Transformation & Analytics"]
+        BatchStream["Apache Spark & Flink<br/>Batch + Stream<br/>Replaces 70+ ETL Scripts"]
+        SQLEngine["SQL Query Engines<br/>Hive & Presto<br/>Interactive Analytics"]
+        Orchestration["Apache Airflow<br/>Workflow Automation"]
+    end
+
+    subgraph Serving["SERVING LAYER<br/>Optimized Access"]
+        RealTime["Real-time Analytics<br/>Apache Druid<br/>Sub-second"]
+        DataWarehouse["Data Warehouse<br/>Hive Tables<br/>Historical"]
+        BI["BI & Visualization<br/>Apache Superset"]
+    end
+
+    subgraph Consumers["DATA CONSUMERS"]
+        Dashboards["Real-time<br/>Dashboards"]
+        Reports["SQL<br/>Reports"]
+        ML["Machine<br/>Learning"]
+        Apps["Clinical<br/>Applications"]
+    end
+
+    %% Main horizontal flow
+    MedicalFacilities -->|"Continuous Flow"| IngestionTools
+    IngestionTools -->|"Raw Data"| DataLake
+    IngestionTools -->|"Streams"| NoSQL
+    
+    DataLake -->|"Batch"| BatchStream
+    DataLake -->|"SQL"| SQLEngine
+    NoSQL -->|"Real-time"| BatchStream
+    DataLake -.->|"Schema"| Metadata
+    
+    BatchStream -->|"Aggregated"| RealTime
+    BatchStream -->|"Curated"| DataWarehouse
+    SQLEngine -->|"Results"| BI
+    
+    RealTime --> Dashboards
+    DataWarehouse --> Reports
+    BatchStream --> ML
+    NoSQL --> Apps
+    BI --> Dashboards
+    
+    Orchestration -.->|"Schedules"| BatchStream
+    Orchestration -.->|"Schedules"| SQLEngine
+
+    %% Styling
+    classDef ingestionStyle fill:#E1F5FF,stroke:#01579B,stroke-width:3px,color:#000,font-weight:bold
+    classDef storageStyle fill:#E8F5E9,stroke:#1B5E20,stroke-width:3px,color:#000,font-weight:bold
+    classDef processingStyle fill:#FFF3E0,stroke:#E65100,stroke-width:3px,color:#000,font-weight:bold
+    classDef servingStyle fill:#F3E5F5,stroke:#4A148C,stroke-width:3px,color:#000,font-weight:bold
+    classDef sourceStyle fill:#FAFAFA,stroke:#424242,stroke-width:2px,color:#000
+    classDef consumerStyle fill:#FCE4EC,stroke:#880E4F,stroke-width:2px,color:#000
+
+    class IngestionTools ingestionStyle
+    class DataLake,Metadata,NoSQL storageStyle
+    class BatchStream,SQLEngine,Orchestration processingStyle
+    class RealTime,DataWarehouse,BI servingStyle
+    class MedicalFacilities sourceStyle
+    class Dashboards,Reports,ML,Apps consumerStyle
